@@ -34,3 +34,8 @@ const bootstrap = async () => {
 };
 
 bootstrap();
+
+// Handle Vite HMR - do full reload to avoid Telegram getUpdates conflicts
+if (import.meta.hot) {
+  import.meta.hot.on("vite:beforeFullReload", shutdown);
+}

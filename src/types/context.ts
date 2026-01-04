@@ -6,6 +6,11 @@ import { LocalContext } from "@core/lib/context";
 import { ConversationFlavor } from "@grammyjs/conversations";
 import { HydrateFlavor } from "@grammyjs/hydrate";
 import type { EventName, MetricKey, EventStatus } from "@core/lib/analytics";
+import type {
+  VariableValue,
+  SetVariableOptions,
+  LockedVariable,
+} from "@core/lib/variables";
 import { type Session } from "./session";
 
 export interface LocalContextFlavor {
@@ -28,10 +33,28 @@ export interface AnalyticsFlavor {
   ) => void;
 }
 
+export interface VariablesFlavor {
+  getVariable: <T extends VariableValue = VariableValue>(
+    key: string,
+  ) => Promise<T | null>;
+  setVariable: (
+    key: string,
+    value: VariableValue,
+    options?: SetVariableOptions,
+  ) => Promise<void>;
+  deleteVariable: (key: string) => Promise<boolean>;
+  hasVariable: (key: string) => Promise<boolean>;
+  getVariableForUpdate: <T extends VariableValue = VariableValue, R = void>(
+    key: string,
+    callback: (locked: LockedVariable<T>) => Promise<R>,
+  ) => Promise<R | null>;
+}
+
 export type Context = DefaultContext &
   SessionFlavor<Session> &
   LocalContextFlavor &
   AnalyticsFlavor &
+  VariablesFlavor &
   I18nFlavor &
   MenuFlavor &
   ConversationFlavor<DefaultContext> &

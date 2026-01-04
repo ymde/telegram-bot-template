@@ -11,12 +11,14 @@ import {
   setupSession,
   setupUpdatesLogger,
   setupUser,
+  setupVariables,
 } from "@core/middlewares";
 import { Context } from "@core/types";
 import path from "path";
 import { conversations } from "@grammyjs/conversations";
+import { EventName, MetricKey } from "@core/lib/analytics";
+import { enabledFeatures } from "@core/features";
 import { config } from "./config";
-import { EventName, MetricKey } from '@core/lib/analytics';
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -42,14 +44,29 @@ bot.use(setupLocalContext());
 bot.use(setupLogger());
 bot.use(i18n.middleware());
 bot.use(setupUser());
+bot.use(setupVariables());
 bot.use(setupAnalytics());
 bot.use(conversations());
 
-bot.command("start", (ctx) => {
+bot.command("start", async (ctx) => {
   ctx.track(MetricKey.TEST, 1, { uid: "1234" });
   ctx.logEvent(EventName.TEST, { record: "test" }, { rcord: "test124" });
+
+  await ctx.getVariable<string>("shariki");
+  await ctx.setVariable("shariki", { items: ["{SHARIKI: `Test`}"] });
+  await ctx.deleteVariable("shariki");
+  await ctx.hasVariable("shariki");
+
+  await ctx.getVariableForUpdate<{ items: string[] }>(
+    "shariki",
+    async (locked) => {
+      await locked.set({
+        items: [...(locked.value ?? { items: [] }).items, "{NIKITA: 123}"],
+      });
+    },
+  );
 
   return ctx.reply(ctx.t("start"));
 });
 
-// bot.use(...enabledFeatures);
+bot.use(...enabledFeatures);

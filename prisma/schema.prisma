@@ -28,4 +28,22 @@ model users {
   is_banned         Boolean   @db.TinyInt @default(false)
 
   created_at        DateTime  @default(now())
+
+  variables         user_variables[]
+}
+
+model user_variables {
+  id          Int       @id @default(autoincrement())
+  user_id     Int
+  key         String    @db.VarChar(255)
+  value       Json      // Stores primitives (string, number, boolean) or complex objects
+
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  expires_at  DateTime?
+
+  user        users     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, key])
+  @@index([expires_at])
 }
