@@ -1,0 +1,35 @@
+import "reflect-metadata";
+import "module-alias/register";
+
+import { bot } from "@app/bot";
+import { GrammyError, HttpError } from "grammy";
+import { closeAnalytics } from "@core/lib/analytics";
+
+const shutdown = async () => {
+  console.log("Shutting down...");
+  bot.stop();
+  await closeAnalytics();
+  console.log("Shutdown complete.");
+};
+
+const bootstrap = async () => {
+  process.once("SIGINT", () => void shutdown());
+  process.once("SIGTERM", () => void shutdown());
+
+  bot.catch((err) => {
+    const { ctx } = err;
+    console.error(`Error while handling update ${ctx.update.update_id}:`);
+    const e = err.error;
+    if (e instanceof GrammyError) {
+      console.error("Error in request:", e.description);
+    } else if (e instanceof HttpError) {
+      console.error("Could not contact Telegram:", e);
+    } else {
+      console.error("Unknown error:", e);
+    }
+  });
+
+  await bot.start();
+};
+
+bootstrap();
