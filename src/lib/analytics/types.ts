@@ -1,11 +1,11 @@
 /** Event names for activity logging */
 export enum EventName {
-
+  TEST = "test",
 }
 
 /** Metric keys for analytics tracking */
 export enum MetricKey {
-
+  TEST = "test",
 }
 
 /** Status for activity logs */

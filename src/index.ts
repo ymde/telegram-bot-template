@@ -1,3 +1,4 @@
+/* eslint-disable no-console  */
 import "reflect-metadata";
 import "module-alias/register";
 
@@ -7,14 +8,14 @@ import { closeAnalytics } from "@core/lib/analytics";
 
 const shutdown = async () => {
   console.log("Shutting down...");
-  bot.stop();
+  await bot.stop();
   await closeAnalytics();
   console.log("Shutdown complete.");
 };
 
 const bootstrap = async () => {
-  process.once("SIGINT", () => void shutdown());
-  process.once("SIGTERM", () => void shutdown());
+  process.once("SIGINT", shutdown);
+  process.once("SIGTERM", shutdown);
 
   bot.catch((err) => {
     const { ctx } = err;

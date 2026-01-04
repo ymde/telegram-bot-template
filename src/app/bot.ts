@@ -15,9 +15,8 @@ import {
 import { Context } from "@core/types";
 import path from "path";
 import { conversations } from "@grammyjs/conversations";
-import { enabledFeatures } from "@core/features";
 import { config } from "./config";
-import { EventName } from '@core/lib/analytics';
+import { EventName, MetricKey } from '@core/lib/analytics';
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -32,7 +31,7 @@ if (config.isDevelopment) {
 
 const i18n = new I18n({
   defaultLocale: "en",
-  directory: path.join(__dirname, "..", "locales"),
+  directory: path.join(__dirname, "..", "..", "locales"),
   useSession: true,
 });
 
@@ -46,4 +45,11 @@ bot.use(setupUser());
 bot.use(setupAnalytics());
 bot.use(conversations());
 
-bot.use(...enabledFeatures);
+bot.command("start", (ctx) => {
+  ctx.track(MetricKey.TEST, 1, { uid: "1234" });
+  ctx.logEvent(EventName.TEST, { record: "test" }, { rcord: "test124" });
+
+  return ctx.reply(ctx.t("start"));
+});
+
+// bot.use(...enabledFeatures);

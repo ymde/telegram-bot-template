@@ -48,6 +48,8 @@ set +a
 log "Starting Docker containers..."
 docker compose up -d
 
+echo "$DATABASE_URL"
+
 # Wait for MariaDB to be ready
 log "Waiting for MariaDB to be ready..."
 until docker compose exec -T database mariadb -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" -e "SELECT 1" &>/dev/null; do
@@ -82,9 +84,7 @@ yarn prisma migrate deploy
 # Run ClickHouse migrations
 log "Running ClickHouse migrations..."
 if command -v dbmate &>/dev/null; then
-    cd db/clickhouse
-    dbmate --url "$CLICKHOUSE_URL" up
-    cd "$PROJECT_DIR"
+    dbmate --url "$CLICKHOUSE_URL" --migrations-dir "./db/clickhouse/migrations" up
 else
     warn "dbmate not installed. Install with: brew install dbmate"
     warn "Skipping ClickHouse migrations..."
