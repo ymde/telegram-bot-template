@@ -47,3 +47,13 @@ model user_variables {
   @@unique([user_id, key])
   @@index([expires_at])
 }
+
+model bot_files {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique @db.VarChar(255)
+  file_id     String   @db.VarChar(255)
+  file_hash   String   @db.VarChar(64)
+  file_type   String   @db.VarChar(50)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}

@@ -5,6 +5,7 @@ import "module-alias/register";
 import { bot } from "@app/bot";
 import { GrammyError, HttpError } from "grammy";
 import { closeAnalytics } from "@core/lib/analytics";
+import { syncMediaAssets } from "@core/lib/media";
 
 const shutdown = async () => {
   console.log("Shutting down...");
@@ -30,6 +31,7 @@ const bootstrap = async () => {
     }
   });
 
+  await syncMediaAssets(bot.api);
   await bot.start();
 };
 

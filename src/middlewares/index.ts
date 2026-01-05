@@ -5,3 +5,4 @@ export { middleware as setupUpdatesLogger } from "./setup-updates-logger.middlew
 export { middleware as setupUser } from "./set-user.middleware";
 export { middleware as setupAnalytics } from "./setup-analytics.middleware";
 export { middleware as setupVariables } from "./setup-variables.middleware";
+export { middleware as setupEditOrReply } from "./setup-edit-or-reply.middleware";

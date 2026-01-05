@@ -11,6 +11,7 @@ import type {
   SetVariableOptions,
   LockedVariable,
 } from "@core/lib/variables";
+import type { EditOrReplyFlavor } from "@core/middlewares/setup-edit-or-reply.middleware";
 import { type Session } from "./session";
 
 export interface LocalContextFlavor {
@@ -55,6 +56,7 @@ export type Context = DefaultContext &
   LocalContextFlavor &
   AnalyticsFlavor &
   VariablesFlavor &
+  EditOrReplyFlavor &
   I18nFlavor &
   MenuFlavor &
   ConversationFlavor<DefaultContext> &

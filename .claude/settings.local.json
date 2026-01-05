@@ -4,7 +4,9 @@
       "Bash(yarn add:*)",
       "Bash(cat:*)",
       "Bash(tree:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(npx prisma:*)"
     ]
   }
 }

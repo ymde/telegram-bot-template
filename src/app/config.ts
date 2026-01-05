@@ -12,6 +12,8 @@ export const config = cleanEnv(process.env, {
   }),
   BOT_TOKEN: str(),
 
+  BOT_UPLOAD_CHAT_ID: num(),
+
   DATABASE_HOST: str(),
   DATABASE_PORT: num({ default: 3306 }),
   DATABASE_INTERNAL_PORT: num({ default: 3306 }),
