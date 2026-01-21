@@ -2,8 +2,8 @@
 import { Api, InputFile, RawApi } from "grammy";
 import { prisma } from "@core/app/database";
 import { createHash } from "crypto";
-import { readdirSync, readFileSync } from "fs";
-import { join, extname, basename } from "path";
+import { readdirSync, readFileSync } from "node:fs";
+import { join, extname, basename } from "node:path";
 import { config } from "@core/app/config";
 import { logger } from "@core/lib/logger";
 import { FileType, reloadMediaCache, setFileIdInCache } from "./cache";
