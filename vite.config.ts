@@ -1,5 +1,6 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig({
   resolve: {
@@ -8,6 +9,16 @@ export default defineConfig({
       "@app": resolve(__dirname, "src/app"),
     },
   },
+  plugins: [
+    nodePolyfills({
+      globals: {
+        Buffer: true,
+        global: true,
+        process: true,
+      },
+      protocolImports: true,
+    }),
+  ],
   build: {
     target: "node22",
     outDir: "dist",
